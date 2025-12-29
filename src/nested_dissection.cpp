@@ -484,7 +484,7 @@ void pick_smaller_side(CutSide&c){
 CutSide inertial_flow(
 	const GraphFragment&g,
 	unsigned min_balance,
-	const std::vector<float>&latitude, const std::vector<float>&longitude,
+	std::span<const float> latitude, std::span<const float> longitude,
 	const std::function<void(const std::string&)>&log_message
 ){
 	assert_fragment_is_valid(g);
@@ -585,7 +585,7 @@ CutSide inertial_flow(
 
 CutSide inertial_flow(
 	const GraphFragment&g,
-	const std::vector<float>&latitude, const std::vector<float>&longitude,
+	std::span<const float> latitude, std::span<const float> longitude,
 	const std::function<void(const std::string&)>&log_message
 ){
 	assert_fragment_is_valid(g);
@@ -850,7 +850,7 @@ std::vector<unsigned>compute_nested_node_dissection_order(
 
 std::vector<unsigned>compute_nested_node_dissection_order_using_inertial_flow(
 	unsigned node_count, const std::vector<unsigned>&tail, const std::vector<unsigned>&head,
-	const std::vector<float>&latitude, const std::vector<float>&longitude,
+	std::span<const float> latitude, std::span<const float> longitude,
 	const std::function<void(const std::string&)>&log_message
 ){
 	long long timer = 0;

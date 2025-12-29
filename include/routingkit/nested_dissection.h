@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <functional>
 #include <string>
+#include <span>
 
 namespace RoutingKit{
 
@@ -73,13 +74,13 @@ public:
 CutSide inertial_flow(
 	const GraphFragment&fragment,
 	unsigned min_balance,
-	const std::vector<float>&latitude, const std::vector<float>&longitude,
+	std::span<const float> latitude, std::span<const float> longitude,
 	const std::function<void(const std::string&)>&log_message = [](const std::string&){}
 );
 
 CutSide inertial_flow(
 	const GraphFragment&fragment,
-	const std::vector<float>&latitude, const std::vector<float>&longitude,
+	std::span<const float> latitude, std::span<const float> longitude,
 	const std::function<void(const std::string&)>&log_message = [](const std::string&){}
 );
 
@@ -112,7 +113,7 @@ std::vector<unsigned>compute_nested_node_dissection_order(
 std::vector<unsigned>compute_nested_node_dissection_order_using_inertial_flow(
 	unsigned node_count,
 	const std::vector<unsigned>&tail, const std::vector<unsigned>&head,
-	const std::vector<float>&latitude, const std::vector<float>&longitude,
+	std::span<const float> latitude, std::span<const float> longitude,
 	const std::function<void(const std::string&)>&log_message = [](const std::string&){}
 );
 

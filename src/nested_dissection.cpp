@@ -47,7 +47,7 @@ GraphFragment make_graph_fragment(unsigned node_count, std::vector<unsigned> tai
 	for(unsigned i=0; i<arc_count; ++i)
 		if(tail[i] != head[i])
 			++non_loop_arc_count;
-		
+
 	fragment.tail.resize(2*non_loop_arc_count);
 	fragment.head.resize(2*non_loop_arc_count);
 	fragment.back_arc.resize(2*non_loop_arc_count);
@@ -66,6 +66,13 @@ GraphFragment make_graph_fragment(unsigned node_count, std::vector<unsigned> tai
 			}
 		}
 	}
+
+	// CRITICAL: Free input vectors immediately after reading them (~6GB for Asia)
+	// Without this, they stay alive until function return, causing OOM during permutation
+	tail.clear();
+	tail.shrink_to_fit();
+	head.clear();
+	head.shrink_to_fit();
 
 	{
 		auto p = compute_inverse_sort_permutation_first_by_tail_then_by_head_and_apply_sort_to_tail(node_count, fragment.tail, fragment.head);

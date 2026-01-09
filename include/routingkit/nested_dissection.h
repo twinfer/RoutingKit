@@ -46,9 +46,8 @@ private:
 	BitVector is_target;
 
 	unsigned flow_intensity;
-	
+
 	BitVector is_arc_saturated;
-	BitVector is_arc_blocked;
 
 	bool is_finished_flag;
 public:
@@ -59,7 +58,14 @@ public:
 	CutSide get_target_cut();
 	CutSide get_balanced_cut();
 
-	void advance();
+	void advance(
+		std::vector<unsigned>&queue,
+		std::vector<unsigned>&path_node,
+		std::vector<unsigned>&path_arc,
+		BitVector&is_arc_blocked,
+		BitVector&level,
+		BitVector&pushed
+	);
 
 	unsigned get_current_flow_intensity()const{
 		return flow_intensity;

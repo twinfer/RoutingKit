@@ -27,7 +27,7 @@ struct GraphFragment{
 	}
 };
 
-GraphFragment make_graph_fragment(unsigned node_count, const std::vector<unsigned>&tail, const std::vector<unsigned>&head);
+GraphFragment make_graph_fragment(unsigned node_count, std::vector<unsigned> tail, std::vector<unsigned> head);
 
 std::vector<GraphFragment>decompose_graph_fragment_into_connected_components(GraphFragment fragment);
 
@@ -111,7 +111,7 @@ std::vector<unsigned>compute_nested_node_dissection_order(
 
 std::vector<unsigned>compute_nested_node_dissection_order_using_inertial_flow(
 	unsigned node_count,
-	const std::vector<unsigned>&tail, const std::vector<unsigned>&head,
+	std::vector<unsigned> tail, std::vector<unsigned> head,
 	const std::vector<float>&latitude, const std::vector<float>&longitude,
 	const std::function<void(const std::string&)>&log_message = [](const std::string&){}
 );

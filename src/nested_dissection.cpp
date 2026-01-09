@@ -38,7 +38,7 @@ void assert_fragment_is_valid(const GraphFragment&fragment){
 	#endif
 }
 
-GraphFragment make_graph_fragment(unsigned node_count, const std::vector<unsigned>&tail, const std::vector<unsigned>&head){
+GraphFragment make_graph_fragment(unsigned node_count, std::vector<unsigned> tail, std::vector<unsigned> head){
 	unsigned arc_count = head.size();
 
 	GraphFragment fragment;
@@ -849,7 +849,7 @@ std::vector<unsigned>compute_nested_node_dissection_order(
 }
 
 std::vector<unsigned>compute_nested_node_dissection_order_using_inertial_flow(
-	unsigned node_count, const std::vector<unsigned>&tail, const std::vector<unsigned>&head,
+	unsigned node_count, std::vector<unsigned> tail, std::vector<unsigned> head,
 	const std::vector<float>&latitude, const std::vector<float>&longitude,
 	const std::function<void(const std::string&)>&log_message
 ){
@@ -859,10 +859,14 @@ std::vector<unsigned>compute_nested_node_dissection_order_using_inertial_flow(
 		timer = -get_micro_time();
 		log_message("Start making graph fragment");
 	}
-	auto g = make_graph_fragment(node_count, tail, head);
+	auto g = make_graph_fragment(node_count, std::move(tail), std::move(head));
+
+	// MEMORY OPTIMIZATION: tail and head are now moved, automatically freed
+	// Fragment has its own copies, input vectors (~6GB for Asia) no longer needed
+
 	if(log_message){
 		timer += get_micro_time();
-		log_message("Finished making graph fragment, needed "+std::to_string(timer)+"musec");
+		log_message("Finished making graph fragment (input vectors freed), needed "+std::to_string(timer)+"musec");
 	}
 
 	auto compute_cut = [&](const GraphFragment&fragment)->BitVector{

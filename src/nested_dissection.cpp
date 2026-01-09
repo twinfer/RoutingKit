@@ -811,7 +811,8 @@ SeparatorDecomposition compute_separator_decomposition(
 					timer = -get_micro_time();
 					log_message("Start computing remaining separator decomposition using recursion");
 				}
-				auto sub_decomp = compute_separator_decomposition(part, compute_separator);
+				// MEMORY OPTIMIZATION: Move part to avoid copying massive fragment at each recursion level
+				auto sub_decomp = compute_separator_decomposition(std::move(part), compute_separator);
 				if(log_message && part.node_count() > 1000){
 					timer += get_micro_time();
 					log_message("Finished recursion, needed "+std::to_string(timer)+"musec");

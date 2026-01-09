@@ -90,6 +90,7 @@ int main(){
 			target_list = {7, 14};
 	
 		auto g = make_graph_fragment(node_count, tail, head);
+		unsigned arc_count = g.arc_count();
 
 		BitVector is_source(node_count, false);
 		is_source.set(0);
@@ -101,8 +102,16 @@ int main(){
 
 		BlockingFlow algo(g, is_source, is_target);
 
+		// Allocate scratch buffers for advance()
+		std::vector<unsigned> queue(node_count);
+		std::vector<unsigned> path_node(node_count);
+		std::vector<unsigned> path_arc(node_count);
+		BitVector is_arc_blocked(arc_count, BitVector::uninitialized);
+		BitVector level(node_count, BitVector::uninitialized);
+		BitVector pushed(node_count, BitVector::uninitialized);
+
 		while(!algo.is_finished())
-			algo.advance();
+			algo.advance(queue, path_node, path_arc, is_arc_blocked, level, pushed);
 
 		{
 			auto c = algo.get_source_cut();
@@ -160,6 +169,7 @@ int main(){
 			head = { 1, 2, 0, 2, 4,13, 0, 1, 3, 4, 2, 5, 1, 2,12, 3, 6, 7, 9,10, 5, 7,11, 5, 6, 8,12,14, 7,12,13, 5, 5,11, 6,10, 4, 7, 8, 1, 8, 7};
 	
 		auto g = make_graph_fragment(node_count, tail, head);
+		unsigned arc_count = g.arc_count();
 
 		BitVector is_source(node_count, false);
 		is_source.set(0);
@@ -171,8 +181,16 @@ int main(){
 
 		BlockingFlow algo(g, is_source, is_target);
 
+		// Allocate scratch buffers for advance()
+		std::vector<unsigned> queue(node_count);
+		std::vector<unsigned> path_node(node_count);
+		std::vector<unsigned> path_arc(node_count);
+		BitVector is_arc_blocked(arc_count, BitVector::uninitialized);
+		BitVector level(node_count, BitVector::uninitialized);
+		BitVector pushed(node_count, BitVector::uninitialized);
+
 		while(!algo.is_finished())
-			algo.advance();
+			algo.advance(queue, path_node, path_arc, is_arc_blocked, level, pushed);
 
 		{
 			auto c = algo.get_source_cut();
@@ -231,6 +249,7 @@ int main(){
 			head = {1,4,2,6,3,5,2,7,3};
 	
 		auto g = make_graph_fragment(node_count, tail, head);
+		unsigned arc_count = g.arc_count();
 
 		BitVector is_source(node_count, false);
 		is_source.set(0);
@@ -240,8 +259,16 @@ int main(){
 
 		BlockingFlow algo(g, is_source, is_target);
 
+		// Allocate scratch buffers for advance()
+		std::vector<unsigned> queue(node_count);
+		std::vector<unsigned> path_node(node_count);
+		std::vector<unsigned> path_arc(node_count);
+		BitVector is_arc_blocked(arc_count, BitVector::uninitialized);
+		BitVector level(node_count, BitVector::uninitialized);
+		BitVector pushed(node_count, BitVector::uninitialized);
+
 		while(!algo.is_finished())
-			algo.advance();
+			algo.advance(queue, path_node, path_arc, is_arc_blocked, level, pushed);
 
 		EXPECT_CMP(algo.get_current_flow_intensity(), ==, 2);
 			
@@ -287,6 +314,7 @@ int main(){
 			head = {1,2,3,4,5,6,7,8,9};
 	
 		auto g = make_graph_fragment(node_count, tail, head);
+		unsigned arc_count = g.arc_count();
 
 		BitVector is_source(node_count, false);
 		is_source.set(0);
@@ -296,8 +324,16 @@ int main(){
 
 		BlockingFlow algo(g, is_source, is_target);
 
+		// Allocate scratch buffers for advance()
+		std::vector<unsigned> queue(node_count);
+		std::vector<unsigned> path_node(node_count);
+		std::vector<unsigned> path_arc(node_count);
+		BitVector is_arc_blocked(arc_count, BitVector::uninitialized);
+		BitVector level(node_count, BitVector::uninitialized);
+		BitVector pushed(node_count, BitVector::uninitialized);
+
 		while(!algo.is_finished())
-			algo.advance();
+			algo.advance(queue, path_node, path_arc, is_arc_blocked, level, pushed);
 
 		EXPECT_CMP(algo.get_current_flow_intensity(), ==, 1);
 			

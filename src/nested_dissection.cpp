@@ -9,6 +9,8 @@
 #include <routingkit/timer.h>
 
 #include <assert.h>
+#include <future>
+#include <array>
 
 namespace RoutingKit{
 
@@ -617,9 +619,24 @@ CutSide inertial_flow(
 ){
 	assert_fragment_is_valid(g);
 
-	auto c25 = inertial_flow(g, 25, latitude, longitude, log_message);
-	auto c33 = inertial_flow(g, 33, latitude, longitude, log_message);
-	auto c40 = inertial_flow(g, 40, latitude, longitude, log_message);
+	// Compute three inertial flow cuts in parallel with different balance parameters
+	std::array<CutSide, 3> results;
+	std::array<unsigned, 3> balances = {25, 33, 40};
+
+	std::array<std::future<CutSide>, 3> futures;
+	for (size_t i = 0; i < 3; ++i) {
+		futures[i] = std::async(std::launch::async, [&, i]() {
+			return inertial_flow(g, balances[i], latitude, longitude, log_message);
+		});
+	}
+
+	for (size_t i = 0; i < 3; ++i) {
+		results[i] = futures[i].get();
+	}
+
+	const auto& c25 = results[0];
+	const auto& c33 = results[1];
+	const auto& c40 = results[2];
 
 	if(
 		static_cast<unsigned long long>(c25.cut_size) * static_cast<unsigned long long>(c33.node_on_side_count) < static_cast<unsigned long long>(c33.cut_size) * static_cast<unsigned long long>(c25.node_on_side_count) &&

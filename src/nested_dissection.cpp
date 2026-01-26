@@ -9,6 +9,7 @@
 #include <routingkit/timer.h>
 
 #include <assert.h>
+#include <omp.h>
 
 namespace RoutingKit{
 
@@ -590,9 +591,17 @@ CutSide inertial_flow(
 ){
 	assert_fragment_is_valid(g);
 
-	auto c25 = inertial_flow(g, 25, latitude, longitude, log_message);
-	auto c33 = inertial_flow(g, 33, latitude, longitude, log_message);
-	auto c40 = inertial_flow(g, 40, latitude, longitude, log_message);
+	CutSide c25, c33, c40;
+
+	#pragma omp parallel sections
+	{
+		#pragma omp section
+		{ c25 = inertial_flow(g, 25, latitude, longitude, nullptr); }
+		#pragma omp section
+		{ c33 = inertial_flow(g, 33, latitude, longitude, nullptr); }
+		#pragma omp section
+		{ c40 = inertial_flow(g, 40, latitude, longitude, nullptr); }
+	}
 
 	if(
 		static_cast<unsigned long long>(c25.cut_size) * static_cast<unsigned long long>(c33.node_on_side_count) < static_cast<unsigned long long>(c33.cut_size) * static_cast<unsigned long long>(c25.node_on_side_count) &&

@@ -111,6 +111,14 @@ std::vector<unsigned> apply_permutation_to_elements_of(const std::vector<unsigne
 	return r; // NVRO
 }
 
+inline
+std::vector<unsigned> apply_permutation_to_elements_of(const std::vector<unsigned>&p, std::vector<unsigned>&&v){
+	assert(is_permutation(p) && "p must be a permutation");
+	assert(std::all_of(v.begin(), v.end(), [&](unsigned x){return x < p.size();}) && "v has an out of bounds element");
+
+	inplace_apply_permutation_to_elements_of(p, v);
+	return std::move(v);
+}
 
 inline
 void inplace_apply_permutation_to_possibly_invalid_elements_of(const std::vector<unsigned>&p, std::vector<unsigned>&v){

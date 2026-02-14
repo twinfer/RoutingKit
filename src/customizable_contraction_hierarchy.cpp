@@ -242,7 +242,7 @@ CustomizableContractionHierarchy::CustomizableContractionHierarchy(
 
 	{
 		input_arc_id = compute_sort_permutation_first_by_tail_then_by_head_and_apply_sort_to_tail(node_count, input_tail, input_head);
-		input_head = apply_permutation(input_arc_id, input_head);
+		input_head = apply_permutation(input_arc_id, std::move(input_head));
 	}
 
 	if(log_message){
@@ -308,7 +308,7 @@ CustomizableContractionHierarchy::CustomizableContractionHierarchy(
 
 		{
 			auto p = compute_inverse_sort_permutation_first_by_tail_then_by_head_and_apply_sort_to_tail(node_count, up_tail, up_head);
-			up_head = apply_inverse_permutation(p, up_head);
+			up_head = apply_inverse_permutation(p, std::move(up_head));
 		}
 
 		up_first_out = invert_vector(up_tail, node_count);
@@ -357,8 +357,8 @@ CustomizableContractionHierarchy::CustomizableContractionHierarchy(
 		{
 			std::swap(input_tail, input_head);
 			auto p = compute_inverse_sort_permutation_first_by_tail_then_by_head_and_apply_sort_to_tail(node_count, input_tail, input_head);
-			input_head = apply_inverse_permutation(p, input_head);
-			input_arc_id = apply_inverse_permutation(p, input_arc_id);
+			input_head = apply_inverse_permutation(p, std::move(input_head));
+			input_arc_id = apply_inverse_permutation(p, std::move(input_arc_id));
 		}
 
 		{

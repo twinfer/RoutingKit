@@ -298,29 +298,69 @@ namespace{
 		if(str_eq(maxspeed, "none") || str_eq(maxspeed, "unlimited"))
 			return 130;
 
-		if(str_eq(maxspeed, "walk") || str_eq(maxspeed, "foot") || str_wild_char_eq(maxspeed, "??:walk") || str_eq(maxspeed, "walking_pace") || str_eq(maxspeed, "schritt"))
+		if(
+			str_eq(maxspeed, "walk") ||
+			str_eq(maxspeed, "foot") ||
+			str_wild_char_eq(maxspeed, "??:walk") ||
+			str_eq(maxspeed, "walking_pace") ||
+			str_eq(maxspeed, "schritt") ||
+			str_eq(maxspeed, "walking")
+		)
 			return 5;
 
 		if(str_wild_char_eq(maxspeed, "??:urban") || str_eq(maxspeed, "urban"))
-			return 40;
+			return 50;
 
 		if(str_wild_char_eq(maxspeed, "??:living_street") || str_eq(maxspeed, "living_street"))
 			return 10;
 
-		if(str_eq(maxspeed, "de:rural") || str_eq(maxspeed, "at:rural") || str_eq(maxspeed, "ro:rural") || str_eq(maxspeed, "rural"))
+		if(
+			str_eq(maxspeed, "de:rural") ||
+			str_eq(maxspeed, "at:rural") ||
+			str_eq(maxspeed, "ro:rural") ||
+			str_eq(maxspeed, "rural") ||
+			str_eq(maxspeed, "pt:trunk")
+		)
 			return 100;
-		if(str_eq(maxspeed, "ru:rural") || str_eq(maxspeed, "ua:rural"))
+		if(
+			str_eq(maxspeed, "ru:rural") ||
+			str_eq(maxspeed, "ua:rural") ||
+			str_eq(maxspeed, "by:rural") ||
+			str_eq(maxspeed, "gr:rural") ||
+			str_eq(maxspeed, "cz:rural") ||
+			str_eq(maxspeed, "bg:rural") ||
+			str_eq(maxspeed, "hr:rural") ||
+			str_eq(maxspeed, "pt:rural") ||
+			str_eq(maxspeed, "pl:rural") ||
+			str_eq(maxspeed, "si:rural")
+		)
 			return 90;
+		if(str_eq(maxspeed, "rs:rural") || str_eq(maxspeed, "fi:rural"))
+			return 80;
 
-		if(str_eq(maxspeed, "ru:motorway"))
+		if(
+			str_eq(maxspeed, "ru:motorway") ||
+			str_eq(maxspeed, "by:motorway") ||
+			str_eq(maxspeed, "ru:trunk") ||
+			str_eq(maxspeed, "md:trunk")
+		)
 			return 110;
 		if(str_eq(maxspeed, "ch:motorway"))
 			return 120;
-		if(str_eq(maxspeed, "at:motorway") || str_eq(maxspeed, "ro:motorway")|| str_eq(maxspeed, "de:motorway"))
+		if(
+			str_eq(maxspeed, "at:motorway") ||
+			str_eq(maxspeed, "ro:motorway") ||
+			str_eq(maxspeed, "de:motorway") ||
+			str_eq(maxspeed, "fr:motorway") ||
+			str_eq(maxspeed, "hr:motorway")
+		)
 			return 130;
 
 		if(str_eq(maxspeed, "national"))
 			return 100;
+
+		if(str_eq(maxspeed, "gb:nsl_single"))
+			return 97; // = 60 mph
 
 		if(str_eq(maxspeed, "ro:trunk"))
 			return 100;
@@ -328,7 +368,11 @@ namespace{
 			return 80;
 		if(str_eq(maxspeed, "it:rural") || str_eq(maxspeed, "hu:rural"))
 			return 90;
-		if(str_eq(maxspeed, "de:zone:30") || str_eq(maxspeed, "de:zone30") || str_eq(maxspeed, "at:zone30"))
+
+		if(str_wild_char_eq(maxspeed, "??:zone20"))
+			return 20;
+
+		if(str_wild_char_eq(maxspeed, "??:zone30") || str_wild_char_eq(maxspeed, "??:zone:30"))
 			return 30;
 
 

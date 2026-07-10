@@ -282,7 +282,7 @@ build/test_customizable_contraction_hierarchy_path_query.o: include/routingkit/b
 
 build/nested_dissection.o: include/routingkit/bit_vector.h include/routingkit/constants.h include/routingkit/filter.h include/routingkit/graph_util.h include/routingkit/id_mapper.h include/routingkit/inverse_vector.h include/routingkit/min_max.h include/routingkit/nested_dissection.h include/routingkit/permutation.h include/routingkit/sort.h include/routingkit/timer.h src/nested_dissection.cpp generate_make_file
 	@mkdir -p build
-	$(CC) $(CFLAGS)  -c src/nested_dissection.cpp -o build/nested_dissection.o
+	$(CC) $(CFLAGS) $(OMP_CFLAGS) -c src/nested_dissection.cpp -o build/nested_dissection.o
 
 bin/run_dijkstra: build/bit_vector.o build/run_dijkstra.o build/timer.o build/vector_io.o build/verify.o
 	@mkdir -p bin
@@ -314,7 +314,7 @@ bin/test_inverse_vector: build/expect.o build/test_inverse_vector.o
 
 bin/test_nested_dissection: build/bit_select.o build/bit_vector.o build/expect.o build/graph_util.o build/id_mapper.o build/nested_dissection.o build/test_nested_dissection.o build/timer.o
 	@mkdir -p bin
-	$(CC) $(LDFLAGS) build/bit_select.o build/bit_vector.o build/expect.o build/graph_util.o build/id_mapper.o build/nested_dissection.o build/test_nested_dissection.o build/timer.o -pthread  -o bin/test_nested_dissection
+	$(CC) $(LDFLAGS) build/bit_select.o build/bit_vector.o build/expect.o build/graph_util.o build/id_mapper.o build/nested_dissection.o build/test_nested_dissection.o build/timer.o $(OMP_LDFLAGS) -pthread  -o bin/test_nested_dissection
 
 bin/compute_geographic_distance_weights: build/bit_vector.o build/compute_geographic_distance_weights.o build/timer.o build/vector_io.o build/verify.o
 	@mkdir -p bin
@@ -358,7 +358,7 @@ bin/test_contraction_hierarchy_pinned_query: build/bit_vector.o build/contractio
 
 bin/compute_nested_dissection_order: build/bit_select.o build/bit_vector.o build/compute_nested_dissection_order.o build/graph_util.o build/id_mapper.o build/nested_dissection.o build/timer.o build/vector_io.o
 	@mkdir -p bin
-	$(CC) $(LDFLAGS) build/bit_select.o build/bit_vector.o build/compute_nested_dissection_order.o build/graph_util.o build/id_mapper.o build/nested_dissection.o build/timer.o build/vector_io.o -pthread  -o bin/compute_nested_dissection_order
+	$(CC) $(LDFLAGS) build/bit_select.o build/bit_vector.o build/compute_nested_dissection_order.o build/graph_util.o build/id_mapper.o build/nested_dissection.o build/timer.o build/vector_io.o $(OMP_LDFLAGS) -pthread  -o bin/compute_nested_dissection_order
 
 bin/test_id_mapper: build/bit_select.o build/bit_vector.o build/expect.o build/id_mapper.o build/test_id_mapper.o build/timer.o
 	@mkdir -p bin

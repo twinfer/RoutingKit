@@ -203,6 +203,11 @@ CustomizableContractionHierarchy::CustomizableContractionHierarchy(
 	order(std::move(arg_order))
 {
 	unsigned node_count = order.size();
+	// The symmetric graph built below has 2*input_arc_count arcs, which must
+	// not overflow the 32-bit arc ids; otherwise its vectors are silently
+	// undersized and the std::copy calls write past the end.
+	if(input_tail.size() >= (1ull<<31))
+		throw std::runtime_error("CCH construction supports at most 2^31-1 input arcs");
 	unsigned input_arc_count = input_tail.size();
 
 	long long timer = 0;

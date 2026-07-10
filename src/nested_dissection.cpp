@@ -9,6 +9,7 @@
 #include <routingkit/timer.h>
 
 #include <assert.h>
+#include <exception>
 #ifdef _OPENMP
 #include <omp.h>
 #endif
@@ -596,15 +597,46 @@ CutSide inertial_flow(
 	CutSide c25, c33, c40;
 
 	#ifdef _OPENMP
+	// An exception escaping an OpenMP structured block is undefined behavior
+	// (in practice std::terminate), and running three cutters concurrently
+	// triples the transient memory peak, making std::bad_alloc plausible on
+	// large fragments. Capture the first exception and rethrow it afterwards.
+	std::exception_ptr section_exception = nullptr;
 	#pragma omp parallel sections
 	{
 		#pragma omp section
-		{ c25 = inertial_flow(g, 25, latitude, longitude, nullptr); }
+		{
+			try{
+				c25 = inertial_flow(g, 25, latitude, longitude, nullptr);
+			}catch(...){
+				#pragma omp critical(routingkit_inertial_flow_exception)
+				if(!section_exception)
+					section_exception = std::current_exception();
+			}
+		}
 		#pragma omp section
-		{ c33 = inertial_flow(g, 33, latitude, longitude, nullptr); }
+		{
+			try{
+				c33 = inertial_flow(g, 33, latitude, longitude, nullptr);
+			}catch(...){
+				#pragma omp critical(routingkit_inertial_flow_exception)
+				if(!section_exception)
+					section_exception = std::current_exception();
+			}
+		}
 		#pragma omp section
-		{ c40 = inertial_flow(g, 40, latitude, longitude, nullptr); }
+		{
+			try{
+				c40 = inertial_flow(g, 40, latitude, longitude, nullptr);
+			}catch(...){
+				#pragma omp critical(routingkit_inertial_flow_exception)
+				if(!section_exception)
+					section_exception = std::current_exception();
+			}
+		}
 	}
+	if(section_exception)
+		std::rethrow_exception(section_exception);
 	#else
 	c25 = inertial_flow(g, 25, latitude, longitude, log_message);
 	c33 = inertial_flow(g, 33, latitude, longitude, log_message);

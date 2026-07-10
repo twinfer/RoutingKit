@@ -69,7 +69,7 @@ std::vector<unsigned>convert_node_path_to_arc_path(const std::vector<unsigned>&f
 std::vector<unsigned>convert_arc_path_to_node_path(unsigned source, const std::vector<unsigned>&head, std::vector<unsigned>path){
 	if(!path.empty()){
 		path.resize(path.size()+1);
-		for(unsigned i=path.size()-1; i>1; --i)
+		for(unsigned i=path.size()-1; i>0; --i)
 			path[i] = head[path[i-1]];
 		path[0] = source;
 	}

@@ -503,7 +503,7 @@ CutSide inertial_flow(
 
 	const unsigned node_count = g.node_count();
 
-	unsigned side_size = (node_count*min_balance)/100;
+	unsigned side_size = static_cast<unsigned long long>(node_count)*min_balance/100;
 	if(side_size == 0)
 		side_size = 1;
 

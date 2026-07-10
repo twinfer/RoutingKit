@@ -115,6 +115,12 @@ inline double geo_dist(double lat_a, double lon_a, double lat_b, double lon_b){
 
 	double len = (vec[0] + vec[1]) * vec[2] + vec[0] - vec[1];
 	len *= 0.5;
+	// Rounding can push len slightly outside of acos's domain [-1,1] for
+	// coincident or antipodal points, in which case acos would return NaN.
+	if(len > 1.0)
+		len = 1.0;
+	else if(len < -1.0)
+		len = -1.0;
 	len  = acos(len);
 	len *= earth_radius;
 

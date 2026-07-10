@@ -98,7 +98,14 @@ namespace{
 					for(unsigned j=0; j<element_count; ++j){
 						// GCC5 does not have vectorized versions of atan2f nor sqrtf
 						// we therefore call the sequential functions as they would prevent the vectorization of the previous loop
-						float c = 2 * atan2f(sqrtf(a_[j]), sqrtf(1-a_[j]));
+						// Rounding can push a slightly outside of [0,1] for coincident or
+						// antipodal points, in which case sqrtf would return NaN.
+						float a = a_[j];
+						if(a < 0.0f)
+							a = 0.0f;
+						else if(a > 1.0f)
+							a = 1.0f;
+						float c = 2 * atan2f(sqrtf(a), sqrtf(1-a));
 						d[i+j].distance_to_pivot = R * c;
 					}
 				}

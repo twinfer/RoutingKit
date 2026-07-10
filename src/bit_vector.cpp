@@ -112,10 +112,16 @@ namespace {
 		return get_v8_uint64_count(bit_count)*64;
 	}
 
+	// Returns the mask of the valid (non-padding) bits in the 512-bit block
+	// that contains bit size-1. If size is a multiple of 512, that block is
+	// fully valid and the mask is all ones.
 	v8_uint64_t get_padding_mask(uint64_t size){
 		v8_uint64_t u = {0};
 
 		uint64_t x = size % 512;
+		if(x == 0)
+			return ~u;
+
 		uint8_t i = 0;
 		while(x >= 64){
 			u[i++] = ~0ull;
